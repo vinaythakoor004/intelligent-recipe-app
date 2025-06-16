@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">intelligent-recipe-app-frontend</string>
+    <string name="title_activity_main">intelligent-recipe-app-frontend</string>
+    <string name="package_name">com.vinaythakoor.recipeapp</string>
+    <string name="custom_url_scheme">com.vinaythakoor.recipeapp</string>
+</resources>
