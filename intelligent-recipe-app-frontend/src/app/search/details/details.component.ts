@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
 import { Recipe } from '../../models/Recipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-details',
@@ -15,7 +16,7 @@ export class DetailsComponent implements OnInit {
   currentImageIndex: number = 0; // For carousel
   defaultFallbackImage = 'assets/images/default-food-image.jpg';
 
-  constructor(private commonService: CommonService) {
+  constructor(private commonService: CommonService, private router: Router) {
 
   }
 
@@ -49,6 +50,8 @@ export class DetailsComponent implements OnInit {
   goBackToList(): void {
     this.selectedRecipe = null;
     this.currentImageIndex = 0; // Reset carousel index
+    this.commonService.isBack = true;
+    this.router.navigate(["/recipe"]);
   }
 
 

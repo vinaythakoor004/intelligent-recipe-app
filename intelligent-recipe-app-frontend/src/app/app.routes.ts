@@ -8,7 +8,7 @@ export const routes: Routes = [
     path: 'recipe', children: [
       { path: '', component: SearchComponent },
       {
-        path: 'details', component: SearchComponent
+        path: 'details', loadComponent: () => import("./search/details/details.component").then(c => c.DetailsComponent)
       }
     ]
   },

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';   // For ngModel (two-way data binding)
 import { GeminiService } from '../services/gemini.service';
 import { catchError, finalize, forkJoin, map, Observable, of, Subscription } from 'rxjs';
@@ -29,11 +29,29 @@ export class SearchComponent {
   private recipeSubscription: Subscription | undefined;
   private imageSubscriptions: Subscription[] = [];
   defaultFallbackImage = 'assets/images/default-food-image.jpg';
+  isBack: boolean = false;
+  @ViewChild('imageUploadInput') fileInput!: ElementRef;
 
   constructor(private geminiService: GeminiService, private commonService: CommonService, private router: Router ) { }
 
   ngOnInit(): void {
+    if (this.commonService.isBack) {
+      this.selectedFile = this.commonService.selectedImage;
+      this.recipes = this.commonService.recipeList;
+      this.isBack = true;
+      this.commonService.isBack = false;
+    }
   }
+
+    ngAfterViewInit() {
+      if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.imagePreviewUrl = reader.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+    }
 
   /**
    * Handles the file selection from the input element.
@@ -82,6 +100,8 @@ export class SearchComponent {
     this.loadingRecipes = false;
     this.loadingImages = false;
     this.commonService.selectedRecipe = null;
+    this.commonService.recipeList = [];
+    this.commonService.selectedImage = null;
     this.currentImageIndex = 0;
 
   }
@@ -96,6 +116,8 @@ export class SearchComponent {
     this.error = '';
     this.recipes = [];
     this.commonService.selectedRecipe = null;
+    this.commonService.recipeList = [];
+    this.commonService.selectedImage = null;
     this.loadingRecipes = false;
     this.loadingImages = false;
     this.currentImageIndex = 0;
@@ -228,6 +250,9 @@ export class SearchComponent {
     this.selectedRecipe = recipe;
     this.commonService.selectedRecipe = recipe;
     this.currentImageIndex = 0;
+    this.commonService.recipeList = this.recipes;
+    this.commonService.selectedImage = this.selectedFile;
+    this.isBack = false;
     this.router.navigate([url]);
   }
 

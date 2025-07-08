@@ -6,7 +6,9 @@ import { Recipe } from '../models/Recipe';
 })
 export class CommonService {
   selectedRecipe: Recipe | null = null;
-
+  recipeList: Array<Recipe> = [];
+  selectedImage: File | null = null;
+  isBack: boolean = false;
   constructor() { }
 
 }
